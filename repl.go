@@ -27,6 +27,11 @@ func startRepl() {
 			description: "Displays a help message",
 			callback:    commandHelp,
 		},
+		"map": {
+			name:        "map",
+			description: "Prints 20location areas in the Pokemon World",
+			callback:    commandMap,
+		},
 	}
 	scanner := bufio.NewScanner(os.Stdin)
 	var input string
@@ -84,5 +89,10 @@ func commandHelp() error {
 	for _, val := range commands {
 		fmt.Printf("%s: %s\n", val.name, val.description)
 	}
+	return nil
+}
+
+func commandMap() error {
+
 	return nil
 }
