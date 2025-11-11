@@ -13,6 +13,11 @@ type cliCommand struct {
 	callback    func() error
 }
 
+type config struct {
+	Next string
+	Previous string
+}
+
 var commands map[string]cliCommand
 
 func startRepl() {
@@ -93,6 +98,7 @@ func commandHelp() error {
 }
 
 func commandMap() error {
+	
 
 	return nil
 }
