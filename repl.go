@@ -2,24 +2,18 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
-	"os"
-	"strings"
-
-	// pokego "github.com/JoshGuerino/PokeGo/pkg"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 )
 
 type cliCommand struct {
 	name        string
 	description string
 	callback    func() error
-}
-
-type config struct {
-	Next     string
-	Previous string
 }
 
 var commands map[string]cliCommand
@@ -101,14 +95,24 @@ func commandHelp() error {
 	return nil
 }
 
-func commandMap() error {
-	// client := pokego.NewClient()
+type location struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
 
-	res, err := http.Get("https://pekeapi.co/api/v2/location-area/")
-	defer res.Body.Close()
+type config struct {
+	Count    int        `json:"name"`
+	Next     string     `json:"next"`
+	Previous string     `json:"previous"`
+	Results  []location `json:"results"`
+}
+
+func commandMap() error {
+	res, err := http.Get("https://pokeapi.co/api/v2/location-area")
 	if err != nil {
 		return err
 	}
+	defer res.Body.Close()
 	if res.StatusCode > 299 {
 		return fmt.Errorf("error status code of response")
 	}
@@ -116,6 +120,15 @@ func commandMap() error {
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
+	}
+
+	var conf config
+	if err := json.Unmarshal(body, &conf); err != nil {
+		return err
+	}
+
+	for _, val := range conf.Results {
+		fmt.Println(val.Name)
 	}
 
 	return nil
