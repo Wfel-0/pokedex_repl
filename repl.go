@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	// pokego "github.com/JoshGuerino/PokeGo/pkg"
+	"io"
+	"net/http"
 )
 
 type cliCommand struct {
@@ -14,7 +18,7 @@ type cliCommand struct {
 }
 
 type config struct {
-	Next string
+	Next     string
 	Previous string
 }
 
@@ -98,7 +102,21 @@ func commandHelp() error {
 }
 
 func commandMap() error {
-	
+	// client := pokego.NewClient()
+
+	res, err := http.Get("https://pekeapi.co/api/v2/location-area/")
+	defer res.Body.Close()
+	if err != nil {
+		return err
+	}
+	if res.StatusCode > 299 {
+		return fmt.Errorf("error status code of response")
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
