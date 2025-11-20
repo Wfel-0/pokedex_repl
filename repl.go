@@ -130,7 +130,7 @@ func commandMap() error {
 	for _, val := range conf.Results {
 		fmt.Println(val.Name)
 	}
-	fmt.Print("asdlfkjasldfkajj")
+	fmt.Print("dfalksjdlf;asdfj")
 
 	return nil
 }
